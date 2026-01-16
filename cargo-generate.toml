@@ -1,0 +1,20 @@
+[template]
+cargo_generate_version = ">=0.10.0"
+#ignore = ["target/", "cargo_build_dir/"]
+
+[placeholders.author]
+type = "string"
+prompt = "Author name (for Cargo.toml)?"
+
+[placeholders.include_build_script]
+type = "bool"
+prompt = "Include build.rs with git/version info?"
+default = true
+
+[placeholders.rpi_host]
+type = "string"
+prompt = "Default RPI target host to deploy to (SSH hostname or IP)?"
+default = "rpi_hostname"
+
+[conditional.'include_build_script == false']
+ignore = ["build.rs"]

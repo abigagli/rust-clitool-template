@@ -1,0 +1,13 @@
+{
+  //"rust-analyzer.cargo.allTargets": false,
+  //"rust-analyzer.check.allTargets": false,
+  //"rust-analyzer.check.workspace": false,
+  //"rust-analyzer.cachePriming.enable": false,
+  "rust-analyzer.diagnostics.useRustcErrorCode": true,
+  "rust-analyzer.cargo.targetDir": "cargo_build_dir/RA",
+  //"lldb.displayFormat": "hex",
+  "lldb.displayFormat": "decimal",
+  "lldb.showDisassembly": "auto",
+  "lldb.dereferencePointers": true,
+  "lldb.consoleMode": "commands"
+}

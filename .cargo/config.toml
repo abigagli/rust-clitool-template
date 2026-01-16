@@ -1,0 +1,10 @@
+[alias]
+rpi = "zigbuild --target aarch64-unknown-linux-gnu"
+
+[env]
+# Until cargo itself provides this, here's a workaround...
+# See https://github.com/rust-lang/cargo/issues/3946#issuecomment-973132993
+CARGO_WORKSPACE_DIR = { value = "", relative = true }
+
+[build]
+build-dir = "cargo_build_dir"

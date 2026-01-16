@@ -1,0 +1,99 @@
+[package]
+name = "{{project-name}}"
+version = "0.1.0"
+edition = "2024"
+authors = ["{{author}}"]
+license = "MIT OR Apache-2.0"
+
+[lints.rust]
+elided_lifetimes_in_paths = "warn"
+future_incompatible = { level = "warn", priority = 1 }
+nonstandard_style = { level = "warn", priority = 1 }
+rust_2021_prelude_collisions = "warn"
+semicolon_in_expressions_from_macros = "warn"
+trivial_numeric_casts = "warn"
+unused_import_braces = "warn"
+unused_lifetimes = "warn"
+rust_2018_idioms = "warn"
+
+[lints.clippy]
+unused_async = "warn"
+single_match = "warn"
+single_match_else = "warn"
+needless_match = "warn"
+needless_late_init = "warn"
+redundant_pattern_matching = "warn"
+redundant_pattern = "warn"
+redundant_guards = "warn"
+collapsible_match = "warn"
+match_single_binding = "warn"
+match_same_arms = "warn"
+match_ref_pats = "warn"
+match_bool = "warn"
+needless_bool = "deny"
+unwrap_used = "warn"
+expect_used = "warn"
+clone_on_ref_ptr = "warn"
+
+# pedantic:       Enables “pedantic” lint group
+# level = "warn”: Sets all pedantic lints to emit warnings (not errors) when triggered.
+# priority = -1:  Gives this configuration lower priority than other lint configurations => individual lint settings (like the ones listed above or below) can override
+#                the pedantic group’s default behavior
+pedantic = { level = "warn", priority = -1 }
+#nursery = { level = "warn", priority = -1 }
+
+# Other restriction lints
+arithmetic_side_effects = "allow"
+as_underscore = "warn"
+assertions_on_result_states = "warn"
+dbg_macro = "warn"
+default_union_representation = "warn"
+empty_structs_with_brackets = "warn"
+filetype_is_file = "warn"               # maybe?
+fn_to_numeric_cast_any = "warn"
+format_push_string = "warn"             # maybe? alternative is fallible.
+get_unwrap = "warn"
+impl_trait_in_params = "allow"
+integer_division = "warn"
+lossy_float_literal = "warn"
+mem_forget = "warn"
+mixed_read_write_in_expression = "warn"
+multiple_inherent_impl = "warn"
+multiple_unsafe_ops_per_block = "warn"
+mutex_atomic = "warn"
+rc_buffer = "warn"
+rc_mutex = "warn"
+same_name_method = "warn"
+semicolon_inside_block = "warn"
+str_to_string = "warn"
+implicit_clone = "warn"
+undocumented_unsafe_blocks = "warn"
+unnecessary_safety_doc = "warn"
+unnecessary_self_imports = "warn"
+unneeded_field_pattern = "warn"
+verbose_file_reads = "warn"
+serde_api_misuse = "deny"
+
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "cargo"] }
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.49", features = ["macros", "net", "rt"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1.0"
+chrono = { version = "0.4", default-features = false, features = [
+    "clock",
+    "std",
+] }
+humantime = "2.3.0"
+humantime-serde = "1.1"
+
+{% if include_build_script %}
+[build-dependencies]
+
+chrono = { version = "0.4", default-features = false, features = [
+    "clock",
+    "std",
+] }
+{% endif %}
