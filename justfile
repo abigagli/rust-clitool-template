@@ -1,5 +1,4 @@
 rpi_cpu_target := "aarch64-unknown-linux-gnu"
-macmini_cpu_target := "aarch64-apple-darwin"
 rpi_default_target_host := "{{rpi_host}}"
 rpi_default_target_folder := "."
 default_binary := `cargo read-manifest | jq '.name'`
@@ -25,13 +24,31 @@ build_for_rpi *ARGS:
 
 ############ BUILDING FOR WINDOWS ############
 build_for_windows *ARGS:
-  @echo "Building for Windows using Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
+  @echo "Building for Windows using alpine-rustx Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
   docker run --rm -v "{% raw %}{{justfile_directory()}}{% endraw %}:/rust_project" -w /rust_project rustx_crosscompiler:latest cargo build --target x86_64-pc-windows-gnu {% raw %}{{ARGS}}{% endraw %}
 
-############ BUILDING FOR MACMINI ############
-build_for_macmini *ARGS:
-  @echo "Building for MACMINI using Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
+# TODO: Fix this
+# zigbuild_for_windows *ARGS:
+#   @echo "Building for Windows using zigbuild Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
+#   docker run --rm -v "{% raw %}{{justfile_directory()}}{% endraw %}:/rust_project" -w /rust_project ghcr.io/rust-cross/cargo-zigbuild cargo zigbuild --target x86_64-pc-windows-gnu {% raw %}{{ARGS}}{% endraw %}
+
+############ BUILDING FOR MACOS/Aarch64 ############
+build_for_macos_aarch64 *ARGS:
+  @echo "Building for MacOS/aarch64 using alpine-rustx Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
   docker run --rm -v "{% raw %}{{justfile_directory()}}{% endraw %}:/rust_project" -w /rust_project rustx_crosscompiler:latest cargo build --target aarch64-apple-darwin {% raw %}{{ARGS}}{% endraw %}
+
+zigbuild_for_macos_aarch64 *ARGS:
+  @echo "Building for MacOS/aarch64 using zigbuild Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
+  docker run --rm -v "{% raw %}{{justfile_directory()}}{% endraw %}:/rust_project" -w /rust_project ghcr.io/rust-cross/cargo-zigbuild cargo zigbuild --target aarch64-apple-darwin {% raw %}{{ARGS}}{% endraw %}
+
+############ BUILDING FOR MACOS/Intel ############
+build_for_macos_intel *ARGS:
+  @echo "Building for MacOS/Intel using alpine-rustx Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
+  docker run --rm -v "{% raw %}{{justfile_directory()}}{% endraw %}:/rust_project" -w /rust_project rustx_crosscompiler:latest cargo build --target x86_64-apple-darwin {% raw %}{{ARGS}}{% endraw %}
+
+zigbuild_for_macos_intel *ARGS:
+  @echo "Building for MacOS/Intel using zigbuild Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
+  docker run --rm -v "{% raw %}{{justfile_directory()}}{% endraw %}:/rust_project" -w /rust_project ghcr.io/rust-cross/cargo-zigbuild cargo zigbuild --target x86_64-apple-darwin {% raw %}{{ARGS}}{% endraw %}
 
 ############ DEPLOYING TO RPI ############
 deploy_rpi build_type executable=default_binary target_host=rpi_default_target_host target_folder=rpi_default_target_folder:

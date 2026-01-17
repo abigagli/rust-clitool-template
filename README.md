@@ -21,7 +21,8 @@ A [cargo-generate](https://github.com/cargo-generate/cargo-generate) template fo
 For cross-compilation:
 
 - [cargo-zigbuild](https://crates.io/crates/cargo-zigbuild) — for Raspberry Pi (aarch64-linux-gnu)
-- [rustx Docker image](https://github.com/tindzk/alpine-rustx) — for Windows and Apple Silicon targets
+- [rustx Docker image](https://github.com/tindzk/alpine-rustx) — for Windows and Apple Intel/Silicon targets
+- [cargo-zigbuild Docker image](https://hub.docker.com/r/messense/cargo-zigbuild) — for Apple Intel/Silicon targets
 
 ## Usage
 
@@ -72,9 +73,9 @@ cargo build --release
 
 The template provides justfile recipes for three cross-compilation scenarios:
 
-#### Raspberry Pi (via cargo-zigbuild)
+#### Raspberry Pi (via cargo-zigbuild installed on the local machine (only tested on macOS host))
 
-Uses [cargo-zigbuild](https://crates.io/crates/cargo-zigbuild) which leverages Zig as a linker for seamless cross-compilation to Linux targets without requiring a separate toolchain.
+Uses [cargo-zigbuild](https://crates.io/crates/cargo-zigbuild) which leverages Zig as a linker for cross-compilation to Linux targets without requiring a separate toolchain.
 
 ```bash
 # Build for aarch64-unknown-linux-gnu
@@ -86,7 +87,7 @@ just deploy_rpi debug
 just deploy_rpi release
 ```
 
-#### Windows & Apple Silicon (via rustx Docker)
+#### Windows & Apple Intel/Silicon (via rustx Docker)
 
 Uses the [alpine-rustx](https://github.com/tindzk/alpine-rustx) Docker image which provides pre-configured cross-compilation toolchains.
 
@@ -96,11 +97,29 @@ just build_for_windows
 just build_for_windows --release
 
 # Build for Apple Silicon (aarch64-apple-darwin)
-just build_for_macmini
-just build_for_macmini --release
+just build_for_macos_aarch64
+just build_for_macos_aarch64 --release
+
+# Build for Apple Intel (x86_64-apple-darwin)
+just build_for_macos_intel
+just build_for_macos_intel --release
 ```
 
-> **Note**: The Docker image must be available locally as `rustx_crosscompiler:latest`. See the [rustx repository](https://github.com/tindzk/alpine-rustx) for build instructions.
+#### Apple Intel/Silicon (via cargo-zigbuild Docker)
+
+Uses the [cargo-zigbuild Docker image](https://hub.docker.com/r/messense/cargo-zigbuild) which provides pre-configured cross-compilation toolchains.
+
+```bash
+# Build for Apple Silicon (aarch64-apple-darwin)
+just zigbuild_for_macos_aarch64
+just zigbuild_for_macos_aarch64 --release
+
+# Build for Apple Intel (x86_64-apple-darwin)
+just zigbuild_for_macos_intel
+just zigbuild_for_macos_intel --release
+```
+
+> **Note**: When using alpine-rustx, the Docker image must be available locally as `rustx_crosscompiler:latest`. See the [rustx repository](https://github.com/tindzk/alpine-rustx) for build instructions.
 
 ## Project Structure
 
