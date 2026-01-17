@@ -28,7 +28,7 @@ For cross-compilation:
 ### Generate a new project
 
 ```bash
-cargo generate --git https://github.com/abigagli/cli_template
+cargo generate --git https://github.com/abigagli/rust-clitool-template
 ```
 
 You will be prompted for:
