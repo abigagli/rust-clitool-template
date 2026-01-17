@@ -16,8 +16,7 @@ fn main() {
         .ok()
         .filter(|o| o.status.success())
         .and_then(|o| String::from_utf8(o.stdout).ok())
-        .map(|s| s.trim().to_owned())
-        .unwrap_or_else(|| "unknown".to_owned());
+        .map_or_else(|| "unknown".to_owned(), |s| s.trim().to_owned());
 
     // Git commit date (ISO 8601)
     let git_date = Command::new("git")
@@ -26,8 +25,7 @@ fn main() {
         .ok()
         .filter(|o| o.status.success())
         .and_then(|o| String::from_utf8(o.stdout).ok())
-        .map(|s| s.trim().to_owned())
-        .unwrap_or_else(|| "unknown".to_owned());
+        .map_or_else(|| "unknown".to_owned(), |s| s.trim().to_owned());
 
     // Check if working directory has uncommitted changes to tracked files
     // Uses diff-index to ignore untracked files (like Cargo.lock on first build)
@@ -40,7 +38,9 @@ fn main() {
     let dirty_suffix = if is_dirty { "-dirty" } else { "" };
 
     // Build timestamp (UTC)
-    let build_timestamp = chrono::Utc::now().format("%Y-%m-%d %H:%M:%S UTC").to_string();
+    let build_timestamp = chrono::Utc::now()
+        .format("%Y-%m-%d %H:%M:%S UTC")
+        .to_string();
 
     // Export as compile-time environment variables
     println!("cargo::rustc-env=BUILD_GIT_HASH={git_hash}{dirty_suffix}");

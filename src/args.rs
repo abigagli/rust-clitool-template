@@ -32,7 +32,6 @@ Author: {author-with-newline}{about-with-newline}
 {usage-heading} {usage}
 {all-args}{after-help}"
 )]
-
 {% else %}
 #[command(
     author=crate_authors!(),

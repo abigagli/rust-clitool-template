@@ -14,6 +14,7 @@
 ///     // ... with_context implementation
 /// }
 /// ```
+#[allow(unused, reason = "provided for convenience")]
 pub trait ContextExt<T> {
     /// The error type that will be returned.
     type Error;
