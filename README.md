@@ -2,6 +2,9 @@
 
 A [cargo-generate](https://github.com/cargo-generate/cargo-generate) template for bootstrapping simple Rust CLI applications with a lib+bin crates structure and just recipes for cross-compilation support.
 
+## Host platform
+Only tested on MacOS/Intel, should work on Linux as well.
+
 ## Features
 
 - **Lib + Bin architecture**:
@@ -73,7 +76,7 @@ cargo build --release
 
 The template provides justfile recipes for three cross-compilation scenarios:
 
-#### Raspberry Pi (via cargo-zigbuild installed on the local machine (only tested on macOS host))
+#### Raspberry Pi (via cargo-zigbuild installed on the local machine)
 
 Uses [cargo-zigbuild](https://crates.io/crates/cargo-zigbuild) which leverages Zig as a linker for cross-compilation to Linux targets without requiring a separate toolchain.
 
