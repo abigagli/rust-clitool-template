@@ -27,11 +27,6 @@ build_for_windows *ARGS:
   @echo "Building for Windows using alpine-rustx Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
   docker run --rm -v "{% raw %}{{justfile_directory()}}{% endraw %}:/rust_project" -w /rust_project rustx_crosscompiler:latest cargo build --target x86_64-pc-windows-gnu {% raw %}{{ARGS}}{% endraw %}
 
-# TODO: Fix this
-# zigbuild_for_windows *ARGS:
-#   @echo "Building for Windows using zigbuild Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
-#   docker run --rm -v "{% raw %}{{justfile_directory()}}{% endraw %}:/rust_project" -w /rust_project ghcr.io/rust-cross/cargo-zigbuild cargo zigbuild --target x86_64-pc-windows-gnu {% raw %}{{ARGS}}{% endraw %}
-
 ############ BUILDING FOR MACOS/Aarch64 ############
 build_for_macos_aarch64 *ARGS:
   @echo "Building for MacOS/aarch64 using alpine-rustx Docker cross-compiler with args: {% raw %}{{ARGS}}{% endraw %}"
