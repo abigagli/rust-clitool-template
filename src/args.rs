@@ -18,10 +18,9 @@ const VERSION_INFO: &str = concat!(
     "date:    ", env!("BUILD_GIT_DATE"), "\n",
     "built:   ", env!("BUILD_TIMESTAMP"),
 );
-
 {% endif %}
 #[derive(Debug, Parser)]
-{% if include_build_script %}
+{%- if include_build_script %}
 #[command( author=crate_authors!(),
     version = VERSION_INFO,
     about,
@@ -32,7 +31,7 @@ Author: {author-with-newline}{about-with-newline}
 {usage-heading} {usage}
 {all-args}{after-help}"
 )]
-{% else %}
+{%- else %}
 #[command(
     author=crate_authors!(),
     version,
@@ -44,7 +43,7 @@ Author: {author-with-newline}{about-with-newline}
 {usage-heading} {usage}
 {all-args}{after-help}"
 )]
-{% endif %}
+{%- endif %}
 pub struct Cli {
     #[arg(
         short,
