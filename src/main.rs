@@ -17,17 +17,17 @@ fn init_logging() -> Result<()> {
 
 // For now we rely on Rust's default process-exit behavior for `main() -> Result<()>` (via
 // `Termination`) to report errors. If we later need more control over error formatting or exit
-// codes, we can switch to the explicit `ExitCode`-based `main` below and handle `run()` errors
-// directly.
-// fn main() -> ExitCode {
-//     match run() {
-//         Ok(()) => std::process::ExitCode::SUCCESS,
-//         Err(err) => {
-//             eprintln!("Error: {err:?}");
-//             std::process::ExitCode::FAILURE
-//         }
+// codes, we can switch to something like the following, from anyhow docs
+// fn main() {
+//     if let Err(err) = run() {
+//         eprintln!("ERROR: {}", err);
+//         err.chain()
+//             .skip(1)
+//             .for_each(|cause| eprintln!("because: {}", cause));
+//         std::process::exit(1);
 //     }
 // }
+
 fn main() -> Result<()> {
     run()
 }
@@ -41,5 +41,3 @@ fn run() -> Result<()> {
     info!("Starting up");
     Ok(())
 }
-
-// Rust guideline compliant 2025-12-16
