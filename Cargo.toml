@@ -6,17 +6,29 @@ authors = ["{{author}}"]
 license = "MIT OR Apache-2.0"
 
 [lints.rust]
-elided_lifetimes_in_paths = "warn"
+#### CONFIGURE clippy LINT GROUPS AT LOWER PRIORITY TO ALLOW INDIVIDUAL LINTS OVERRIDES (AT DEFAULT priority 0)
+rust_2018_idioms = { level = "warn", priority = -1 }
 future_incompatible = { level = "warn", priority = 1 }
 nonstandard_style = { level = "warn", priority = 1 }
+elided_lifetimes_in_paths = "warn"
 rust_2021_prelude_collisions = "warn"
 semicolon_in_expressions_from_macros = "warn"
 trivial_numeric_casts = "warn"
 unused_import_braces = "warn"
 unused_lifetimes = "warn"
-rust_2018_idioms = "warn"
+#######################################################
 
 [lints.clippy]
+#### CONFIGURE clippy LINT GROUPS AT LOWER PRIORITY TO ALLOW INDIVIDUAL LINTS OVERRIDES (AT DEFAULT priority 0)
+# pedantic:       Enables “pedantic” lint group
+# level = "warn”: Sets all pedantic lints to emit warnings (not errors) when triggered.
+# priority = -1:  Gives this configuration lower priority than other lint configurations => individual lint settings (like the ones listed above or below) can override
+#                the pedantic group’s default behavior
+pedantic = { level = "warn", priority = -1 }
+#nursery = { level = "warn", priority = -1 }
+cargo = { level = "warn", priority = -1 }
+#######################################################
+
 unused_async = "warn"
 single_match = "warn"
 single_match_else = "warn"
@@ -34,13 +46,6 @@ needless_bool = "deny"
 unwrap_used = "warn"
 expect_used = "warn"
 clone_on_ref_ptr = "warn"
-
-# pedantic:       Enables “pedantic” lint group
-# level = "warn”: Sets all pedantic lints to emit warnings (not errors) when triggered.
-# priority = -1:  Gives this configuration lower priority than other lint configurations => individual lint settings (like the ones listed above or below) can override
-#                the pedantic group’s default behavior
-pedantic = { level = "warn", priority = -1 }
-#nursery = { level = "warn", priority = -1 }
 
 # Other restriction lints
 arithmetic_side_effects = "allow"
