@@ -56,3 +56,22 @@ deploy_rpi build_type executable=default_binary target_host=rpi_default_target_h
   echo "Deploying $mode build of {% raw %}{{executable}}{% endraw %} to {% raw %}{{target_host}}:{{target_folder}}{% endraw %}"
   #just upload_rpi_release {{executable}} {{target_host}} {{target_folder}}
   just upload_rpi {% raw %}{{build_type}}{% endraw %} {% raw %}{{executable}}{% endraw %} {% raw %}{{target_host}}{% endraw %} {% raw %}{{target_folder}}{% endraw %}
+
+############ UPGRADE DEPENDENCIES #############
+check_stale_deps *ARGS:
+    cargo upgrade -n --verbose {{ ARGS }}
+
+upgrade_dependency *CRATE:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cargo upgrade  --incompatible allow -p {{ CRATE }}
+
+validate_dep_upgrade *CARGO_FLAGS:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cargo update
+    cargo build --workspace {{ CARGO_FLAGS }}
+    just build_for_rpi -p iq2angles
+    cargo test --workspace --no-fail-fast {{ CARGO_FLAGS }}
+
+
