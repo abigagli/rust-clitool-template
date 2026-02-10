@@ -1,6 +1,14 @@
-use std::process::Command;
-
+#[allow(
+    clippy::expect_used,
+    reason = "build script failure must stop everything"
+)]
 fn main() {
+    built::write_built_file().expect("Failed to acquire build-time information");
+}
+
+#[cfg(false)]
+fn main() {
+    use std::process::Command;
     // Rerun build script when:
     // - Git index changes (commits, staging) - to update/clear dirty status
     // - Source files change - to detect modifications for dirty status

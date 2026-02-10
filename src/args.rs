@@ -1,6 +1,37 @@
 use clap::{Args, Parser, Subcommand, ValueEnum, builder::{Styles, styling}, crate_authors};
 use std::path::PathBuf;
 
+{% if include_build_script %}
+pub mod built_info {
+    include!(concat!(env!("OUT_DIR"), "/built.rs"));
+
+    use std::fmt::Write as _;
+
+    /// Returns a detailed version string with build-time metadata.
+    /// The returned `&'static str` is leaked once (called at startup only).
+    pub fn long_version() -> &'static str {
+        let mut s = String::new();
+        writeln!(s, "{PKG_VERSION}").ok();
+        writeln!(s, "target:       {TARGET}").ok();
+        writeln!(s, "rustc:        {RUSTC_VERSION}").ok();
+
+        if let (Some(version), Some(dirty), Some(hash), Some(head_ref)) =
+            (GIT_VERSION, GIT_DIRTY, GIT_COMMIT_HASH_SHORT, GIT_HEAD_REF)
+        {
+            let dirty_marker = if dirty { " (dirty)" } else { "" };
+            writeln!(s, "git:          {version}{dirty_marker}").ok();
+            writeln!(s, "commit:       {hash}").ok();
+            writeln!(s, "branch:       {head_ref}").ok();
+        }
+
+        writeln!(s, "built:        {BUILT_TIME_UTC}").ok();
+        writeln!(s, "profile:      {PROFILE}").ok();
+        write!(s, "features:     {FEATURES_STR}").ok();
+        Box::leak(s.into_boxed_str())
+    }
+}
+{% endif %}
+
 fn get_styles() -> Styles {
     Styles::styled()
         .header(styling::AnsiColor::Green.on_default() | styling::Effects::BOLD)
@@ -10,19 +41,21 @@ fn get_styles() -> Styles {
 }
 
 
-{% if include_build_script %}
-const VERSION_INFO: &str = concat!(
-    env!("CARGO_PKG_VERSION"),
-    "\n",
-    "commit:  ", env!("BUILD_GIT_HASH"), "\n",
-    "date:    ", env!("BUILD_GIT_DATE"), "\n",
-    "built:   ", env!("BUILD_TIMESTAMP"),
-);
-{% endif %}
+// {% if include_build_script %}
+// const VERSION_INFO: &str = concat!(
+//     env!("CARGO_PKG_VERSION"),
+//     "\n",
+//     "commit:  ", env!("BUILD_GIT_HASH"), "\n",
+//     "date:    ", env!("BUILD_GIT_DATE"), "\n",
+//     "built:   ", env!("BUILD_TIMESTAMP"),
+// );
+// {% endif %}
 #[derive(Debug, Parser)]
 {%- if include_build_script %}
 #[command( author=crate_authors!(),
-    version = VERSION_INFO,
+    version,
+    //long_version = VERSION_INFO,
+    long_version = built_info::long_version(),
     about,
     styles=get_styles(),
     help_template = "\

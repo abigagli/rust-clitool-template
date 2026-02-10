@@ -29,6 +29,8 @@ pedantic = { level = "warn", priority = -1 }
 cargo = { level = "warn", priority = -1 }
 #######################################################
 
+cargo_common_metadata = "allow"
+multiple_crate_versions = "allow"
 unused_async = "warn"
 single_match = "warn"
 single_match_else = "warn"
@@ -96,9 +98,6 @@ humantime-serde = "1.1"
 
 {% if include_build_script %}
 [build-dependencies]
-
-chrono = { version = "0.4", default-features = false, features = [
-    "clock",
-    "std",
-] }
+built = { version = "0.8", features = ["chrono", "git2"] }
+# chrono = { version = "0.4", default-features = false, features = [ "clock", "std", ] }
 {% endif %}
