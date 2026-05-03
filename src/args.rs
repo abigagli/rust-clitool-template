@@ -9,24 +9,25 @@ pub mod built_info {
 
     /// Returns a detailed version string with build-time metadata.
     /// The returned `&'static str` is leaked once (called at startup only).
+    #[allow(clippy::let_underscore_must_use, reason = "just creating a build info string")]
     pub fn long_version() -> &'static str {
         let mut s = String::new();
-        writeln!(s, "{PKG_VERSION}").ok();
-        writeln!(s, "target:       {TARGET}").ok();
-        writeln!(s, "rustc:        {RUSTC_VERSION}").ok();
+        let _ = writeln!(s, "{PKG_VERSION}");
+        let _ = writeln!(s, "target:       {TARGET}");
+        let _ = writeln!(s, "rustc:        {RUSTC_VERSION}");
 
         if let (Some(version), Some(dirty), Some(hash), Some(head_ref)) =
             (GIT_VERSION, GIT_DIRTY, GIT_COMMIT_HASH_SHORT, GIT_HEAD_REF)
         {
             let dirty_marker = if dirty { " (dirty)" } else { "" };
-            writeln!(s, "git:          {version}{dirty_marker}").ok();
-            writeln!(s, "commit:       {hash}").ok();
-            writeln!(s, "branch:       {head_ref}").ok();
+            let _ = writeln!(s, "git:          {version}{dirty_marker}");
+            let _ = writeln!(s, "commit:       {hash}");
+            let _ = writeln!(s, "branch:       {head_ref}");
         }
 
-        writeln!(s, "built:        {BUILT_TIME_UTC}").ok();
-        writeln!(s, "profile:      {PROFILE}").ok();
-        write!(s, "features:     {FEATURES_STR}").ok();
+        let _ = writeln!(s, "built:        {BUILT_TIME_UTC}");
+        let _ = writeln!(s, "profile:      {PROFILE}");
+        let _ = write!(s, "features:     {FEATURES_STR}");
         Box::leak(s.into_boxed_str())
     }
 }
